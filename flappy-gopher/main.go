@@ -7,6 +7,7 @@ import (
 
 	"github.com/veandco/go-sdl2/ttf"
 
+	img "github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -41,6 +42,27 @@ func run() error {
 	}
 
 	time.Sleep(5 * time.Second)
+
+	if err := drawBackground(render); err != nil {
+		return fmt.Errorf("Could not draw background: %v", err)
+	}
+
+	time.Sleep(5 * time.Second)
+
+	return nil
+}
+
+func drawBackground(render *sdl.Renderer) error {
+	render.Clear()
+	texture, err := img.LoadTexture(render, "res/imgs/background.png")
+	if err != nil {
+		return fmt.Errorf("Could not load background image: %v", err)
+	}
+	defer texture.Destroy()
+	if err := render.Copy(texture, nil, nil); err != nil {
+		return fmt.Errorf("Could not copy background: %v", err)
+	}
+	render.Present()
 
 	return nil
 }
